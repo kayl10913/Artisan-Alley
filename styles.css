@@ -273,9 +273,18 @@ p {
 
 .hero-buttons {
     display: flex;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-md);
     justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
+    margin-top: var(--spacing-lg);
+}
+
+.hero-buttons .btn {
+    min-width: 180px;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: 1.1rem;
+    white-space: nowrap;
 }
 
 @media (min-width: 768px) {
@@ -813,12 +822,21 @@ section {
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-md);
+    max-width: 500px;
+    margin: 0 auto;
 }
 
 .story-image img {
     width: 100%;
     height: auto;
     display: block;
+}
+
+@media (min-width: 968px) {
+    .story-image {
+        max-width: 450px;
+        margin: 0;
+    }
 }
 
 .mission-section {
@@ -919,9 +937,18 @@ section {
 
 .cta-buttons {
     display: flex;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-md);
     justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
+    margin-top: var(--spacing-md);
+}
+
+.cta-buttons .btn {
+    min-width: 180px;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: 1.1rem;
+    white-space: nowrap;
 }
 
 /* ===== Shop Page Styles ===== */
@@ -954,6 +981,16 @@ section {
 .category-btn.active {
     background-color: var(--color-clay-brown);
     color: var(--color-soft-cream);
+}
+
+.products-section .row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.products-section .col-md-6,
+.products-section .col-lg-4 {
+    transition: all 0.3s ease;
 }
 
 .products-section {
@@ -994,7 +1031,13 @@ section {
 }
 
 .product-card.hidden {
-    display: none;
+    display: none !important;
+    visibility: hidden;
+    opacity: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
 .product-image {

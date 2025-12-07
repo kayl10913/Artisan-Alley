@@ -105,6 +105,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const productCards = document.querySelectorAll('.product-card');
     
     if (categoryButtons.length > 0 && productCards.length > 0) {
+        // Initialize: ensure all cards are visible on load
+        productCards.forEach(card => {
+            card.classList.remove('hidden');
+            card.style.opacity = '';
+            card.style.transition = '';
+            // Ensure parent column is visible
+            const parentCol = card.closest('.col-md-6, .col-lg-4');
+            if (parentCol) {
+                parentCol.style.display = '';
+            }
+        });
+        
         categoryButtons.forEach(button => {
             button.addEventListener('click', function() {
                 // Remove active class from all buttons
@@ -113,29 +125,64 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.classList.add('active');
                 
                 const category = this.getAttribute('data-category');
+                let visibleCount = 0;
                 
-                // Filter products
-                productCards.forEach(card => {
+                // Filter products with smooth animation
+                productCards.forEach((card, index) => {
+                    const cardCategory = card.getAttribute('data-category');
+                    const parentCol = card.closest('.col-md-6, .col-lg-4');
+                    let shouldShow = false;
+                    
                     if (category === 'all') {
-                        card.classList.remove('hidden');
-                        // Fade in animation
-                        card.style.opacity = '0';
-                        setTimeout(() => {
-                            card.style.transition = 'opacity 0.3s ease';
-                            card.style.opacity = '1';
-                        }, 10);
+                        shouldShow = true;
                     } else {
-                        const cardCategory = card.getAttribute('data-category');
-                        if (cardCategory === category) {
-                            card.classList.remove('hidden');
-                            card.style.opacity = '0';
-                            setTimeout(() => {
-                                card.style.transition = 'opacity 0.3s ease';
-                                card.style.opacity = '1';
-                            }, 10);
-                        } else {
-                            card.classList.add('hidden');
+                        shouldShow = cardCategory === category;
+                    }
+                    
+                    if (shouldShow) {
+                        // Show card - remove hidden class first
+                        card.classList.remove('hidden');
+                        // Show parent column
+                        if (parentCol) {
+                            parentCol.style.display = '';
                         }
+                        // Reset all inline styles
+                        card.style.opacity = '';
+                        card.style.transform = '';
+                        card.style.transition = '';
+                        card.style.height = '';
+                        card.style.margin = '';
+                        card.style.padding = '';
+                        card.style.visibility = '';
+                        // Fade in animation
+                        requestAnimationFrame(() => {
+                            card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                            card.style.opacity = '0';
+                            card.style.transform = 'translateY(10px)';
+                            requestAnimationFrame(() => {
+                                setTimeout(() => {
+                                    card.style.opacity = '1';
+                                    card.style.transform = 'translateY(0)';
+                                }, visibleCount * 30); // Stagger animation based on visible count
+                            });
+                        });
+                        visibleCount++;
+                    } else {
+                        // Hide card with fade out
+                        card.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(-10px)';
+                        setTimeout(() => {
+                            card.classList.add('hidden');
+                            // Hide parent column to fix grid alignment
+                            if (parentCol) {
+                                parentCol.style.display = 'none';
+                            }
+                            // Reset styles after hiding
+                            card.style.opacity = '';
+                            card.style.transform = '';
+                            card.style.transition = '';
+                        }, 200);
                     }
                 });
             });
