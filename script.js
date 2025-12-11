@@ -210,6 +210,34 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// ===== Auto-resize Textarea =====
+document.addEventListener('DOMContentLoaded', function() {
+    const textareas = document.querySelectorAll('textarea');
+    
+    textareas.forEach(textarea => {
+        // Set initial height
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+        
+        // Auto-resize on input
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+        
+        // Reset height on form reset
+        const form = textarea.closest('form');
+        if (form) {
+            form.addEventListener('reset', function() {
+                setTimeout(() => {
+                    textarea.style.height = 'auto';
+                    textarea.style.height = textarea.scrollHeight + 'px';
+                }, 0);
+            });
+        }
+    });
+});
+
 // ===== Contact Form Submission =====
 document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contactForm');
@@ -230,6 +258,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Reset form
                 contactForm.reset();
+                
+                // Reset textarea height after form reset
+                const messageTextarea = document.getElementById('message');
+                if (messageTextarea) {
+                    setTimeout(() => {
+                        messageTextarea.style.height = 'auto';
+                        messageTextarea.style.height = messageTextarea.scrollHeight + 'px';
+                    }, 0);
+                }
             }
         });
     }
